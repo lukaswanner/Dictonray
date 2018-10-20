@@ -27,7 +27,7 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
     //TODO fragen ob ich hierfür primzahlen nutzen soll oder ob des mit normalen geht
     public V insert(K key, V value) {
         int hashedKey = hash(key); //save the hashed key
-        //System.out.println(hashedKey);
+        System.out.println(hashedKey);
         boolean filled = searchArray(hashedKey); //see if there is already an object at arr[hashedkey]
         // System.out.println(filled);
         if (filled) { //if filled is true that means we need to search further to see if our key is already in use
