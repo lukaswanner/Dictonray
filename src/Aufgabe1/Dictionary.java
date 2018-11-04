@@ -24,6 +24,10 @@ public interface Dictionary<K, V> {
             this.value = value;
             //set the given values from the construstor equal with the class
         }
+
+        public V getValue() {
+            return value;
+        }
     }
 
 }
