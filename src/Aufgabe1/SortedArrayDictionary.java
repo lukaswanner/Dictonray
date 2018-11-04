@@ -86,6 +86,13 @@ public class SortedArrayDictionary<K extends Comparable<? super K>, V> implement
 
     @Override
     public V remove(K key) {
-        return null;
+        int i = searchKey(key);
+        if (i == -1)
+            return null;
+        V r = data[i].value;
+        for (int j = i; j < size - 1; j++)
+            data[j] = data[j + 1];
+        data[--size] = null;
+        return r;
     }
 }

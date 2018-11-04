@@ -26,8 +26,6 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
     }
 
     @Override
-    //TODO ensureCapasity irgendwie noch implimentieren falls an arr[stelle].size size > 2 ist
-    //TODO fragen ob ich hierfür primzahlen nutzen soll oder ob des mit normalen geht
     public V insert(K key, V value) {
         int hashedKey = hash(key); //save the hashed key
         int position = searchPosition(hashedKey, key); //get the position
