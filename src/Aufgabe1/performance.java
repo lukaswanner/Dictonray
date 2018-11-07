@@ -15,10 +15,9 @@ public class performance {
 
     public long insert2(Dictionary dict) {
         long startTime = System.nanoTime();
-
         for (int i = 0; i < 16000; i++) {
             dict.insert(i,i);
-            System.out.println("...");
+            System.out.print(".");
         }
         long endTime = System.nanoTime();
         long duration = (endTime -startTime);
