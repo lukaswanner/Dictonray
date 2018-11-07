@@ -40,6 +40,7 @@ public class tui {
                 performance perf = new performance();
                 System.out.println("einfügen von 8000 einträgen " + perf.insert1(dict)/1000000 + " ms");
                 System.out.println("suchen nach 8000 einträgen " +perf.search1(dict)/1000000 + " ms");
+                System.out.println("suchen nach 8000 einträgen (nicht erfolgreich) " +perf.search3(dict)/1000000 + " ms");
             }else if(a[0].equals("perf16")){
                 performance perf = new performance();
                 System.out.println("einfügen von 16000 einträgen " + perf.insert2(dict)/1000000 + " ms");

@@ -17,7 +17,6 @@ public class performance {
         long startTime = System.nanoTime();
         for (int i = 0; i < 16000; i++) {
             dict.insert(i,i);
-            System.out.print(".");
         }
         long endTime = System.nanoTime();
         long duration = (endTime -startTime);
@@ -47,5 +46,15 @@ public class performance {
         return duration;
     }
 
+    public long search3(Dictionary dict) {
+        long startTime = System.nanoTime();
+
+        for (int i = 8000; i < 16000; i++) {
+            dict.search(i);
+        }
+        long endTime = System.nanoTime();
+        long duration = (endTime -startTime);
+        return duration;
+    }
 
 }
