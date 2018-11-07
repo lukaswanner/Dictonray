@@ -1,6 +1,8 @@
 package Aufgabe1;
 
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 public class HashDictionary<K, V> implements Dictionary<K, V> {
 
@@ -71,6 +73,39 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
         return null;
     }
 
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public Iterator<Entry<K, V>> iterator() {
+        return new HashIterator();
+
+    }
+
+    private class HashIterator implements Iterator<Entry<K,V>> {
+
+        int currInd = 0;
+        Iterator<Entry<K,V>> currListIt = arr[0].iterator();
+        public Entry<K,V> next() {
+            if(!hasNext()) throw new NoSuchElementException();
+            return currListIt.next();
+        }
+
+        @Override
+        public boolean hasNext() {
+            if(currListIt.hasNext())
+                return true;
+            while (++currInd < arr.length) {
+                currListIt = arr[currInd].iterator();
+                if(currListIt.hasNext())
+                    return true;
+            }
+            return false;
+        }
+    }
+
 
     //------------------------------smaller methods for the search insert function below ----------------------------------------------------------
 
@@ -89,14 +124,14 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
 
     private int searchPosition(int hashedKey, K key) {
         for (int i = 0; i < arr[hashedKey].size(); i++) {
-            if (arr[hashedKey].get(i).key.equals(key)) {
+            if (arr[hashedKey].get(i).getKey().equals(key)) {
                 return i;
             }
         }
         return -1;
     }
 
-    private static boolean isPrime(int num) {
+    private boolean isPrime(int num) {
         if (num < 2) return false;
         if (num == 2) return true;
         if (num % 2 == 0) return false;
@@ -114,14 +149,14 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
         for (int i = 0; i < newArr.length; i++) {
             newArr[i] = new LinkedList<Entry<K, V>>();
         }
-        LinkedList<Entry<K, V>>[] oldArr = arr.clone();
+        LinkedList<Entry<K, V>>[] oldArr = arr;
         //set the old arr to the new one
         arr = newArr;
         insert(Key, Value);
         for (int i = 0; i < oldArr.length; i++) {
             for (int j = 0; j < oldArr[i].size(); j++) {
-                K key = oldArr[i].get(j).key; //get the key
-                V value = oldArr[i].get(j).value; //get the value
+                K key = oldArr[i].get(j).getKey(); //get the key
+                V value = oldArr[i].get(j).getValue(); //get the value
                 insert(key, value); //insert both in the new arr
 
             }

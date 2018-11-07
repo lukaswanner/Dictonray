@@ -1,5 +1,8 @@
 package Aufgabe1;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 public class SortedArrayDictionary<K extends Comparable<? super K>, V> implements Dictionary<K, V> {
 
     private static final int DEF_CAPACITY = 16;
@@ -26,9 +29,9 @@ public class SortedArrayDictionary<K extends Comparable<? super K>, V> implement
 
         while (re >= li) {
             int m = (li + re) / 2;
-            if (key.compareTo(data[m].key) < 0) {
+            if (key.compareTo(data[m].getKey()) < 0) {
                 re = m - 1;
-            } else if (key.compareTo(data[m].key) > 0) {
+            } else if (key.compareTo(data[m].getKey()) > 0) {
                 li = m + 1;
             } else {
                 return m;
@@ -40,7 +43,7 @@ public class SortedArrayDictionary<K extends Comparable<? super K>, V> implement
     //most simple search con : takes too long with big dataset
     private int simplesearchKey(K key) {
         for (int i = 0; i < size; i++) {
-            if (data[i].key.equals(key)) {
+            if (data[i].getKey().equals(key)) {
                 return i;
             }
         }
@@ -51,7 +54,7 @@ public class SortedArrayDictionary<K extends Comparable<? super K>, V> implement
     public V search(K key) {
         int i = searchKey(key);
         if (i >= 0) {
-            return data[i].value;
+            return data[i].getValue();
         } else {
             return null;
         }
@@ -62,8 +65,8 @@ public class SortedArrayDictionary<K extends Comparable<? super K>, V> implement
         int i = searchKey(key);
         //if key is already in the data set
         if (i >= 0) {
-            V oldvalue = data[i].value;
-            data[i].value = value;
+            V oldvalue = data[i].getValue();
+            data[i].setValue(value);
             return oldvalue;
         }
         //if key isn't already in the data set
@@ -72,7 +75,7 @@ public class SortedArrayDictionary<K extends Comparable<? super K>, V> implement
         }
         int j = size - 1;
         //shift everything starting from the back one position forward
-        while (j >= 0 && key.compareTo(data[j].key) < 0) {
+        while (j >= 0 && key.compareTo(data[j].getKey()) < 0) {
             data[j + 1] = data[j];
             j--;
         }
@@ -89,11 +92,33 @@ public class SortedArrayDictionary<K extends Comparable<? super K>, V> implement
         int i = searchKey(key);
         if (i == -1)
             return null;
-        V r = data[i].value;
+        V r = data[i].getValue();
         for (int j = i; j < size - 1; j++)
             data[j] = data[j + 1];
         data[--size] = null;
         return r;
 
+    }
+
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public Iterator<Entry<K, V>> iterator() { return new SortedIterator();}
+
+    private class SortedIterator implements Iterator {
+        int current = 0;
+
+        @Override
+        public boolean hasNext() { return current < size && data[current] != null; }
+
+        @Override
+        public Entry<K,V> next() {
+            if(!hasNext())
+                throw new NoSuchElementException();
+            return data[current++];
+        }
     }
 }
