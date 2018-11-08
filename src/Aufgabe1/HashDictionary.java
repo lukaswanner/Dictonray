@@ -38,7 +38,8 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
             arr[hashedKey].add(E); //insert our entry
             return oldValue;
         }
-        if (arr[hashedKey].size() >= 2) {
+        if (size()/m >= 2) {
+            System.out.println("jo");
             ensureCapacity(key, value);
             return null;
         }
@@ -75,7 +76,13 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
 
     @Override
     public int size() {
-        return 0;
+        int size=0;
+        for (int i = 0; i < arr.length; i++) {
+            for(Entry<K,V> e: arr[i]) {
+                size ++;
+            }
+        }
+        return size;
     }
 
     @Override

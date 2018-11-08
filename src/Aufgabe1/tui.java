@@ -5,10 +5,10 @@ import java.util.Scanner;
 
 public class tui {
 
-    public static void tuui() throws IOException {
+    private static void tuui() throws IOException {
         System.out.println("geben sie was ein: ");
         Scanner in = new Scanner(System.in);
-        String[] a2 = null;
+        String[] a2;
         int lines = 0;
         int size = 0;
         File file =  new File("/home/student/Schreibtisch/dtengl.txt");
@@ -16,6 +16,9 @@ public class tui {
         while (true) {
             String input = in.nextLine();
             String[] a = input.split(" ");
+            if(a[0].equals("size")) {
+                System.out.println(dict.size());
+            }
             if(a[0].equals("create")) {
                 if(a.length == 2 && a[1].contains("hash")) {
                     dict = new HashDictionary();
