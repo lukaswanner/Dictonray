@@ -1,34 +1,61 @@
 package Aufgabe1;
 
+import java.io.*;
 import java.util.Scanner;
 
 public class tui {
 
-    public static void tuui() {
-        System.out.println("gib was ein : ");
+    public static void tuui() throws IOException {
+        System.out.println("geben sie was ein: ");
         Scanner in = new Scanner(System.in);
+        String[] a2 = null;
+        int lines = 0;
+        int size = 0;
+        File file =  new File("/home/student/Schreibtisch/dtengl.txt");
         Dictionary<String,String> dict = new SortedArrayDictionary<>();
         while (true) {
             String input = in.nextLine();
-            char first = input.charAt(0);
             String[] a = input.split(" ");
-            if(a[0].contains("create") && first == 'c') {
-                if(a[1].equals("Hash")) {
+            if(a[0].equals("create")) {
+                if(a.length == 2 && a[1].contains("hash")) {
                     dict = new HashDictionary();
                     System.out.println("verwenden nun HashDictionary");
                 }else{
                     dict = new SortedArrayDictionary<>();
                 }
-            }else if(a[0].contains("read") && first == 'r' && a.length == 3) {
-                dict.insert(a[1],a[2]);
+            }else if(a[0].equals("read")) {
+                    if (a.length == 2) {
+                        file = new File(a[1]);
+                    }else if(a.length == 3) {
+                        file = new File(a[2]);
+                        lines = Integer.parseInt(a[1]);
+                    }
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String st;
+                if(a.length <= 2) {
+                    while ((st = br.readLine()) != null) {
+                        a2 = st.split(" ");
+                        dict.insert(a2[0], a2[1]);
+                    }
+                }else {
+                    while ((st = br.readLine()) != null && lines > 0) {
+                        a2 = st.split(" ");
+                        dict.insert(a2[0], a2[1]);
+                        lines = lines -1;
+                    }
+                }
                 System.out.println("erfolgreich eingelesen");
-            }else if(a[0].equals("exit") && first == 'e'){
+
+
+            }else if(a[0].equals("exit")){
                 System.out.println("fertig");
                 return;
             }else if(a[0].equals("p")){
                 for (Dictionary.Entry<String, String> e : dict) {
+                    size++;
                     System.out.println(" KEY: " + e.getKey() + ": " + "VALUE: "+e.getValue());
                 }
+                System.out.println("Insgesammt sind " + size + " Wörter im Wörterbuch");
             }else if(a[0].equals("s")){
                 System.out.println(dict.search(a[1]));
             }else if(a[0].equals("r")){
@@ -51,7 +78,7 @@ public class tui {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         tuui();
     }
 
