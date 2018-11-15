@@ -39,13 +39,14 @@ public class teeeest {
             // (siehe Aufgabe 10; Programmiertechnik 2).
             // Pruefen Sie die Ausgabe von prettyPrint auf Papier nach.
             BinaryTreeDictionary<Integer, Integer> btd = new BinaryTreeDictionary<>();
-            btd.insert(10, 1);
-            btd.insert(20, 2);
-            btd.insert(30, 3);
+            btd.insert(10, 5);
+            btd.insert(20, 3);
+            btd.insert(30,8);
+            //btd.insert(30, 3);
             System.out.println("insert:");
             btd.prettyPrint();
 
-            btd.insert(40, 4);
+            /*btd.insert(40, 4);
             btd.insert(50, 5);
             System.out.println("insert:");
             btd.prettyPrint();
@@ -58,12 +59,12 @@ public class teeeest {
             btd.insert(60, 0);
             System.out.println("insert:");
             btd.prettyPrint();
-
+*/
             System.out.println("For Each Loop:");
             for (Dictionary.Entry<Integer, Integer> e : btd) {
                 System.out.println(e.getKey() + ": " + e.getValue());
             }
-
+/*
             btd.remove(30);
             System.out.println("remove:");
             btd.prettyPrint();
@@ -72,7 +73,7 @@ public class teeeest {
             btd.remove(40);
             btd.remove(50);
             System.out.println("remove:");
-            btd.prettyPrint();
+            btd.prettyPrint();*/
         }
 
         private static void testDict(Dictionary<String, String> dict) {
