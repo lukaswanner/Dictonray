@@ -39,7 +39,6 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
             return oldValue;
         }
         if (size()/m >= 2) {
-            System.out.println("jo");
             ensureCapacity(key, value);
             return null;
         }

@@ -7,6 +7,7 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
 
     private Node<K,V> root = null;
     private V oldValue;
+    private int Anzahl=0;
 
     @Override
     public V insert(K key, V value) {
@@ -95,6 +96,57 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
 
     public void prettyPrint() {
         System.out.println(root.value);
+        if (root.left != null || root.right != null) {
+            if (root.left == null) {
+                System.out.printf("|__#%n");
+            } else {
+                prettyPrintR(root.left);
+            }
+            if (root.right == null) {
+                System.out.printf("|__#%n");
+            } else {
+                prettyPrintR(root.right);
+            }
+        }
+    }
+
+    private void prettyPrintR(Node<K,V> p) {
+
+        System.out.println("|__" + p.value);
+
+        if (p.right != null || p.left != null) {
+            if (p.left == null) {
+                Anzahl++;
+                for (int i = 0; i <Anzahl ; i++) {
+                    System.out.printf("\t");
+                }
+                System.out.printf("|__#%n");
+                Anzahl--;
+            } else {
+                Anzahl++;
+                for (int i = 0; i <Anzahl ; i++) {
+                    System.out.printf("\t");
+                }
+
+                prettyPrintR(p.left);
+                Anzahl--;
+            }
+            if (p.right == null) {
+                Anzahl++;
+                for (int i = 0; i <Anzahl ; i++) {
+                    System.out.printf("\t");
+                }
+                System.out.printf("|__#%n");
+                Anzahl--;
+            } else {
+                Anzahl++;
+                for (int i = 0; i <Anzahl ; i++) {
+                    System.out.printf("\t");
+                }
+                prettyPrintR(p.right);
+                Anzahl--;
+            }
+        }
     }
 
 
