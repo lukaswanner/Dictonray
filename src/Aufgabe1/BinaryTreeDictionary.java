@@ -1,15 +1,19 @@
 package Aufgabe1;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements Dictionary<K, V>  {
 
-    private Node<K,V> root = null;
+    private Entry<K,V> root = null;
     private V oldValue;
 
     @Override
     public V insert(K key, V value) {
         root = insertR(key,value,root);
+        if(root != null) {
+            root.parent = null;
+        }
         return oldValue;
     }
 
@@ -30,25 +34,72 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
     }
 
     @Override
-    public Iterator<Entry<K, V>> iterator() {
-        return null;
-    }
+    public Iterator<Entry<K, V>> iterator() { return new BinaryIterator(root);}
 
+    private class BinaryIterator implements Iterator {
+        private Entry next;
+
+        public BinaryIterator(Entry root){
+            next = root;
+            if(next == null){
+                return;
+            }
+            while (next.left != null) {
+                next = next.left;
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return next != null;
+
+        }
+
+        @Override
+        public Entry<K,V> next() {
+            if(!hasNext()) throw new NoSuchElementException();
+            Entry r = next;
+
+            if(next.right != null) {
+                next = next.right;
+                while (next.left != null) {
+                    next = next.left;
+                }
+                return r;
+            }
+
+            while (true) {
+                if(next.parent == null) {
+                    next = null;
+                    return r;
+                }
+                if(next.parent.left == next){
+                    next = next.parent;
+                    return r;
+                }
+                next = next.parent;
+            }
+
+
+        }
+    }
 
 
     //------------------------zusätliche Klassen und Hilfsmethoden-------------------------
 
     //Klassen
-     private static class Node<K,V> {
+     private static class Entry<K,V> {
+        private Entry<K,V> parent;
         private K key;
         private V value;
-        private Node<K,V> left;
-        private Node<K,V> right;
-        private Node(K k,V v) {
+        private Entry<K,V> left;
+        private Entry<K,V> right;
+        private Entry(K k,V v) {
             key = k;
             value = v;
             left = null;
             right = null;
+            parent=null;
         }
     }
 
@@ -58,7 +109,7 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
      }
 
     //Methoden
-    private V searchR(K key,Node<K,V> p) {
+    private V searchR(K key,Entry<K,V> p) {
         if(p == null)
             return null;
         else if(key.compareTo(p.key) < 0)
@@ -69,23 +120,29 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
             return p.value;
     }
 
-    private Node<K,V> insertR(K key,V value,Node<K,V> p){
+    private Entry<K,V> insertR(K key,V value,Entry<K,V> p){
         if(p == null){
-            p = new Node(key,value);
+            p = new Entry(key,value);
             oldValue = null;
         }
-        else if(key.compareTo(p.key) < 0)
-            p.left = insertR(key,value,p.left);
-        else if(key.compareTo(p.key)>0)
-            p.right = insertR(key,value,p.right);
-        else {
+        else if(key.compareTo(p.key) < 0) {
+            p.left = insertR(key, value, p.left);
+            if(p.left != null) {
+                p.left.parent = p;
+            }
+        } else if(key.compareTo(p.key)>0) {
+            p.right = insertR(key, value, p.right);
+            if(p.right != null) {
+                p.right.parent = p;
+            }
+        } else {
             oldValue = p.value;
             p.value = value;
         }
         return p;
     }
 
-    private Node<K,V> removeR(K key,Node<K,V> p) {
+    private Entry<K,V> removeR(K key,Entry<K,V> p) {
         if( p == null) {oldValue =null;}
         else if(key.compareTo(p.key) < 0)
             p.left = removeR(key,p.left);
@@ -107,7 +164,7 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
         return p;
     }
 
-    private Node<K,V> getRemMinR(Node<K,V> p,MinEntry<K,V> min){
+    private Entry<K,V> getRemMinR(Entry<K,V> p,MinEntry<K,V> min){
         assert p != null;
         if(p.left == null) {
             min.key = p.key;
