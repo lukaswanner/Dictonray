@@ -114,7 +114,8 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
 
     private void prettyPrintR(Node<K, V> p) {
 
-        System.out.println("|__" + p.value);
+        System.out.print("|__" + p.value);
+        System.out.print(" Parent ----> " + p.parent.value + "\n");
 
         if (p.right != null || p.left != null) {
             if (p.left == null) {
@@ -270,10 +271,12 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
     private Node<K, V> rotateRight(Node<K, V> p) {
         assert p.left != null;
         Node<K, V> q = p.left;
+        q.parent = p.parent;
+        p.parent = q;
         p.left = q.right;
         q.right = p;
-        p.parent = q;
-        p.left.parent = p;
+        if (p.left != null)
+            p.left.parent = p;
         p.height = Math.max(getHeight(p.left), getHeight(p.right)) + 1;
         q.height = Math.max(getHeight(q.left), getHeight(q.right)) + 1;
         return q;
@@ -282,10 +285,12 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
     private Node<K, V> rotateLeft(Node<K, V> p) {
         assert p.right != null;
         Node<K, V> q = p.right;
+        q.parent = p.parent;
+        p.parent = q;
         p.right = q.left;
         q.left = p;
-        p.parent = q;
-        p.right.parent = p;
+        if (p.right != null)
+            p.right.parent = p;
         p.height = Math.max(getHeight(p.left), getHeight(p.right)) + 1;
         q.height = Math.max(getHeight(q.left), getHeight(q.right)) + 1;
         return q;
