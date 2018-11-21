@@ -97,7 +97,7 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
     }
 
     public void prettyPrint() {
-        System.out.println(root.value);
+        System.out.println(root.key + "/" + root.value);
         if (root.left != null || root.right != null) {
             if (root.left == null) {
                 System.out.printf("|__#%n");
@@ -113,9 +113,8 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
     }
 
     private void prettyPrintR(Node<K, V> p) {
-
-        System.out.print("|__" + p.value);
-        System.out.print(" Parent ----> " + p.parent.value + "\n");
+        System.out.print("|__: " + p.key + "/" + p.value);
+        System.out.print(" Parent ----> " + p.parent.key + "/" + p.parent.value + "\n");
 
         if (p.right != null || p.left != null) {
             if (p.left == null) {
@@ -233,6 +232,7 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
             p.key = min.key;
             p.value = min.value;
         }
+        p = balance(p);
         return p;
     }
 

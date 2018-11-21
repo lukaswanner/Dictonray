@@ -39,14 +39,14 @@ public class teeeest {
             // (siehe Aufgabe 10; Programmiertechnik 2).
             // Pruefen Sie die Ausgabe von prettyPrint auf Papier nach.
             BinaryTreeDictionary<Integer, Integer> btd = new BinaryTreeDictionary<>();
-            btd.insert(1, 10);
-            btd.insert(2, 20);
-            btd.insert(3, 30);
+            btd.insert(10, 0);
+            btd.insert(20, 0);
+            btd.insert(30, 0);
             System.out.println("insert:");
             btd.prettyPrint();
 
-            btd.insert(4, 40);
-            btd.insert(5, 50);
+            btd.insert(40, 0);
+            btd.insert(50, 0);
             System.out.println("insert:");
             btd.prettyPrint();
 
