@@ -8,6 +8,7 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
     private Node<K, V> root = null;
     private V oldValue;
     private int Anzahl = 0;
+    private int size= 0 ;
 
     @Override
     public V insert(K key, V value) {
@@ -31,7 +32,7 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -193,6 +194,7 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
     private Node<K, V> insertR(K key, V value, Node<K, V> p) {
         if (p == null) {
             p = new Node(key, value);
+            size++;
             oldValue = null;
         } else if (key.compareTo(p.key) < 0) {
             p.left = insertR(key, value, p.left);
@@ -224,6 +226,7 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
             //und hat ein oder kein Kind
             oldValue = p.value;
             p = (p.left != null) ? p.left : p.right;
+            size--;
         } else {
             //p muss gelöscht werden und haz zwei kinder
             MinNode<K, V> min = new MinNode<>();
@@ -231,6 +234,7 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
             oldValue = p.value;
             p.key = min.key;
             p.value = min.value;
+            size--;
         }
         p = balance(p);
         return p;
@@ -316,6 +320,7 @@ public class BinaryTreeDictionary<K extends Comparable<? super K>, V> implements
             p = p.right;
         } else
             p.left = getRemMinR(p.left, min);
+        p = balance(p);
         return p;
     }
 
