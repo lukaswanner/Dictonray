@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 
 public class HashDictionary<K, V> implements Dictionary<K, V> {
 
+    private int size= 0;
     private int m = 41; //set the size of the array
     private LinkedList<Entry<K, V>>[] arr = new LinkedList[m];//create an linkedlist array to store the entrys later
 
@@ -29,8 +30,10 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
 
     @Override
     public V insert(K key, V value) {
+
         int hashedKey = hash(key); //save the hashed key
         int position = searchPosition(hashedKey, key); //get the position
+
         if (position > -1) { //if we find an object
             V oldValue = arr[hashedKey].get(position).getValue(); // get the old value
             arr[hashedKey].remove(position); //remove the object
@@ -39,12 +42,12 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
             return oldValue;
         }
         if (size()/m >= 2) {
-            System.out.println("jo");
             ensureCapacity(key, value);
             return null;
         }
         Entry<K, V> E = new Entry<>(key, value); //create our entry
         arr[hashedKey].add(E); //insert our entry
+        size++;
         return null;
 
     }
@@ -69,6 +72,7 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
         if (position > -1) { //we found our entry
             V value = arr[hashedKey].get(position).getValue(); //save our entry for the return later
             arr[hashedKey].remove(position); //remove our entry
+            size --;
             return value; //return the deleted value
         }
         return null;
@@ -76,12 +80,6 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
 
     @Override
     public int size() {
-        int size=0;
-        for (int i = 0; i < arr.length; i++) {
-            for(Entry<K,V> e: arr[i]) {
-                size ++;
-            }
-        }
         return size;
     }
 
