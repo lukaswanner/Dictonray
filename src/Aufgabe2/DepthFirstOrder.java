@@ -5,6 +5,7 @@ package Aufgabe2;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Klasse für Tiefensuche.
@@ -15,10 +16,11 @@ import java.util.List;
  */
 public class DepthFirstOrder<V> {
 
-    private final List<V> preOrder = new LinkedList<>();
+    private List<V> preOrder = new LinkedList<>();
     private final List<V> postOrder = new LinkedList<>();
     private final DirectedGraph<V> myGraph;
     private int numberOfDFTrees = 0;
+    private V root;
     // ...
 
     /**
@@ -28,7 +30,6 @@ public class DepthFirstOrder<V> {
      */
     public DepthFirstOrder(DirectedGraph<V> g) {
         myGraph = g;
-        // ...
     }
 
     /**
@@ -38,7 +39,22 @@ public class DepthFirstOrder<V> {
      * @return Pre-Order-Reihenfolge der Tiefensuche.
      */
     public List<V> preOrder() {
+
+        preOrder = visitDF(root, myGraph, preOrder);
+
         return Collections.unmodifiableList(preOrder);
+    }
+
+    private List<V> visitDF(V v, DirectedGraph g, List<V> set) {
+
+        set.add(v);
+
+        for (Object o : g.getSuccessorVertexSet(v)) {
+            V w = (V) o;
+            if (!set.contains(w))
+                visitDF(w, g, set);
+        }
+        return set;
     }
 
     /**
@@ -60,20 +76,24 @@ public class DepthFirstOrder<V> {
 
     public static void main(String[] args) {
         DirectedGraph<Integer> g = new AdjacencyListDirectedGraph<>();
-        g.addEdge(1, 2);
-        g.addEdge(2, 5);
-        g.addEdge(5, 1);
-        g.addEdge(2, 6);
-        g.addEdge(3, 7);
-        g.addEdge(4, 3);
-        g.addEdge(4, 6);
+        g.addEdge(1, 2);        //1 ------> 2
+        g.addEdge(2, 5);        //2 ------> 5
+        g.addEdge(5, 1);        //5 ------> 1
+        g.addEdge(2, 6);        //2 ------> 6
+        g.addEdge(3, 7);        //3 ------> 7
+        g.addEdge(4, 3);        //4 ------> 3
+        g.addEdge(4, 6);        //4 ------> 6
         //g.addEdge(7,3);
-        g.addEdge(7, 4);
+        g.addEdge(7, 4);        //7 ------> 4
 
         DepthFirstOrder<Integer> dfs = new DepthFirstOrder<>(g);
+
+
         System.out.println(dfs.numberOfDFTrees());    // 2
-        System.out.println(dfs.preOrder());        // [1, 2, 5, 6, 3, 7, 4]
-        System.out.println(dfs.postOrder());        // [5, 6, 2, 1, 4, 7, 3]
+        // System.out.println(dfs.preOrder());        // [1, 2, 5, 6, 3, 7, 4]
+        //  System.out.println(g.getVertexSet());
+        //System.out.println(dfs.postOrder());        // [5, 6, 2, 1, 4, 7, 3]
+
 
     }
 }
