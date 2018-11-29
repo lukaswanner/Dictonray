@@ -16,6 +16,7 @@ public class DepthFirstOrder<V> {
     private List<V> preOrder = new LinkedList<>();
     private final List<V> postOrder = new LinkedList<>();
     private final DirectedGraph<V> myGraph;
+    private List<V> besucht = new LinkedList<>();
     private int numberOfDFTrees = 0;
     private V root;
     // ...
@@ -60,13 +61,17 @@ public class DepthFirstOrder<V> {
 
     private void visitPost(V v, DirectedGraph g) {
 
+        besucht.add(v);
         for (Object o : g.getSuccessorVertexSet(v)) {
             V w = (V) o;
-            if (!preOrder.contains(w)){
+            if (!besucht.contains(w)){
                 visitDF(w,g);
-                preOrder.add(v);
+                System.out.println(w);
             }
         }
+        if(!postOrder.contains(v))
+            postOrder.add(v);
+
     }
 
 
