@@ -63,9 +63,9 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 
     @Override
     public boolean addEdge(V v, V w) {
-        if (succ.containsKey(v) == false) //Falls die Knoten noch nicht da sind erstellen wir sie erst
+        if (!succ.containsKey(v)) //Falls die Knoten noch nicht da sind erstellen wir sie erst
             addVertex(v);
-        if (succ.containsKey(w) == false)
+        if (!succ.containsKey(w))
             addVertex(w);
 
         if (!succ.get(v).containsKey(w)) { //Dann wird geprüft ob es die Verbindung schon gibt
@@ -128,14 +128,14 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
     @Override
     public Set<V> getPredecessorVertexSet(V v) {
         if (pred.containsKey(v))
-            return pred.get(v).keySet();
+            return Collections.unmodifiableSet(pred.get(v).keySet());
         throw new IllegalArgumentException("Nicht vorhanden");
     }
 
     @Override
     public Set<V> getSuccessorVertexSet(V v) {
         if (succ.containsKey(v))
-            return succ.get(v).keySet();
+            return Collections.unmodifiableSet(succ.get(v).keySet());
         throw new IllegalArgumentException("Knoten nicht vorhanden");
     }
 
@@ -222,7 +222,7 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
         Set<Integer> s = g.getSuccessorVertexSet(2);
         System.out.println(s);
 
-        s.remove(5);    // Laufzeitfehler! Warum?
+        //s.remove(5);    // Laufzeitfehler! Warum?
 
     }
 }

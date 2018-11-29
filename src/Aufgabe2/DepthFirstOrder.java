@@ -2,10 +2,7 @@
 // 22.02.2017
 package Aufgabe2;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Klasse für Tiefensuche.
@@ -40,21 +37,52 @@ public class DepthFirstOrder<V> {
      */
     public List<V> preOrder() {
 
+
+        root = myGraph.getVertexSet().iterator().next();
+
         preOrder = visitDF(root, myGraph, preOrder);
 
         return Collections.unmodifiableList(preOrder);
     }
 
-    private List<V> visitDF(V v, DirectedGraph g, List<V> set) {
+    private List<V> visitDF(V v, DirectedGraph g, List<V> besucht) {
 
+        Queue<V> q = new LinkedList<>();
+        q.add(v);
+
+        while(!q.isEmpty()) {
+            v = q.remove();
+            if(besucht.contains(v))
+                continue;
+
+            besucht.add(v);
+
+            for (Object l : g.getSuccessorVertexSet(v)) {
+                V w = (V) l;
+                if (!besucht.contains(w))
+                    q.add(w);
+            }
+            for (Object l : g.getPredecessorVertexSet(v)) {
+                V w = (V) l;
+                if (!besucht.contains(w))
+                    q.add(w);
+            }
+
+
+        }
+        return besucht;
+        /*
+        
         set.add(v);
 
         for (Object o : g.getSuccessorVertexSet(v)) {
             V w = (V) o;
-            if (!set.contains(w))
-                visitDF(w, g, set);
+            if (!set.contains(w)){
+                visitDF(w,g,set);
+            }
         }
         return set;
+        */
     }
 
     /**
@@ -86,11 +114,12 @@ public class DepthFirstOrder<V> {
         //g.addEdge(7,3);
         g.addEdge(7, 4);        //7 ------> 4
 
+
         DepthFirstOrder<Integer> dfs = new DepthFirstOrder<>(g);
 
 
-        System.out.println(dfs.numberOfDFTrees());    // 2
-        // System.out.println(dfs.preOrder());        // [1, 2, 5, 6, 3, 7, 4]
+        //System.out.println(dfs.numberOfDFTrees());    // 2
+        System.out.println(dfs.preOrder());        // [1, 2, 5, 6, 3, 7, 4]
         //  System.out.println(g.getVertexSet());
         //System.out.println(dfs.postOrder());        // [5, 6, 2, 1, 4, 7, 3]
 
