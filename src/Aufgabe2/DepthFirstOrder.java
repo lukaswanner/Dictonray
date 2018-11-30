@@ -28,6 +28,12 @@ public class DepthFirstOrder<V> {
      */
     public DepthFirstOrder(DirectedGraph<V> g) {
         myGraph = g;
+        for (V v : myGraph.getVertexSet()) {
+            if (!besucht.contains(v)) {
+                visitDF(v, myGraph);
+                numberOfDFTrees++;
+            }
+        }
     }
 
     /**
@@ -37,41 +43,27 @@ public class DepthFirstOrder<V> {
      * @return Pre-Order-Reihenfolge der Tiefensuche.
      */
     public List<V> preOrder() {
-
-        for (V v : myGraph.getVertexSet()){
-            visitDF(v,myGraph);
+        besucht.clear();
+        preOrder.clear();
+        for (V v : myGraph.getVertexSet()) {
+            if (!besucht.contains(v)) {
+                visitDF(v, myGraph);
+                numberOfDFTrees++;
+            }
         }
 
         return Collections.unmodifiableList(preOrder);
     }
 
-    private void visitDF(V v, DirectedGraph g) {
-
-        if(!preOrder.contains(v))
+    private void visitDF(V v, DirectedGraph<V> g) {
+        if (!preOrder.contains(v))
             preOrder.add(v);
-
-        for (Object o : g.getSuccessorVertexSet(v)) {
-            V w = (V) o;
-            if (!preOrder.contains(w)){
-                visitDF(w,g);
-            }
-        }
-    }
-
-
-    private void visitPost(V v, DirectedGraph g) {
-
         besucht.add(v);
-        for (Object o : g.getSuccessorVertexSet(v)) {
-            V w = (V) o;
-            if (!besucht.contains(w)){
-                visitDF(w,g);
-                System.out.println(w);
+        for (V succ : g.getSuccessorVertexSet(v)) {
+            if (!besucht.contains(succ)) {
+                visitDF(succ, g);
             }
         }
-        if(!postOrder.contains(v))
-            postOrder.add(v);
-
     }
 
 
@@ -82,12 +74,25 @@ public class DepthFirstOrder<V> {
      * @return Post-Order-Reihenfolge der Tiefensuche.
      */
     public List<V> postOrder() {
+        besucht.clear();
+        postOrder.clear();
+        for (V v : myGraph.getVertexSet()) {
+            visitPost(v, myGraph);
 
-        for (V v : myGraph.getVertexSet()){
-            visitPost(v,myGraph);
         }
 
         return Collections.unmodifiableList(postOrder);
+    }
+
+    private void visitPost(V v, DirectedGraph<V> g) {
+        besucht.add(v);
+        for (V succ : g.getSuccessorVertexSet(v)) {
+            if (!besucht.contains(succ)) {
+                visitPost(succ, g);
+            }
+        }
+        if (!postOrder.contains(v))
+            postOrder.add(v);
     }
 
     /**
@@ -112,12 +117,9 @@ public class DepthFirstOrder<V> {
 
         DepthFirstOrder<Integer> dfs = new DepthFirstOrder<>(g);
 
-
-        //System.out.println(dfs.numberOfDFTrees());    // 2
+        System.out.println(dfs.numberOfDFTrees());    // 2
         System.out.println(dfs.preOrder());        // [1, 2, 5, 6, 3, 7, 4]
-        //  System.out.println(g.getVertexSet());
         System.out.println(dfs.postOrder());        // [5, 6, 2, 1, 4, 7, 3]
-
 
     }
 }
