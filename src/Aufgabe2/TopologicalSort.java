@@ -3,10 +3,7 @@
 
 package Aufgabe2;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Klasse zur Erstellung einer topologischen Sortierung.
@@ -25,34 +22,29 @@ public class TopologicalSort<V> {
      * @param g gerichteter Graph.
      */
     public TopologicalSort(DirectedGraph<V> g) {
-        int[] inDegree = new int[g.getVertexSet().size() + 1];
-        Queue<V> q = new LinkedList<>();
+        Deque<V> q = new LinkedList<>();
+        Set<V> visited = new HashSet<>();
+
         for (V v : g.getVertexSet()) {
-            inDegree[Integer.parseInt(v.toString())] = g.getInDegree(v);
-            if (inDegree[Integer.parseInt(v.toString())] == 0) {
-                q.add(v);
-            }
-
+            if (visited.contains(v))
+                continue;
+            topUtil(q, visited, v, g);
         }
-
         while (!q.isEmpty()) {
-            V v = q.remove();
-            ts.add(v);
-            for (V w : g.getSuccessorVertexSet(v)) {
-                if (--inDegree[Integer.parseInt(w.toString())] == 0) {
-                    q.add(w);
-                }
-            }
+            ts.add(q.remove());
         }
 
-        if (ts.size() != g.getVertexSet().size()) {
-            ts.clear();
+    }
+
+    public void topUtil(Deque<V> q, Set<V> visited, V v, DirectedGraph<V> g) {
+        visited.add(v);
+
+        for (V w : g.getSuccessorVertexSet(v)) {
+            if (visited.contains(w))
+                continue;
+            topUtil(q, visited, w, g);
         }
-
-
-
-
-
+        q.offerFirst(v);
     }
 
     /**
@@ -67,20 +59,38 @@ public class TopologicalSort<V> {
 
 
     public static void main(String[] args) {
-        DirectedGraph<Integer> g = new AdjacencyListDirectedGraph<>();
-        g.addEdge(1, 2);
-        g.addEdge(2, 3);
-        g.addEdge(3, 4);
-        g.addEdge(3, 5);
-        g.addEdge(4, 6);
-        g.addEdge(5, 6);
-        g.addEdge(6, 7);
+        DirectedGraph<String> g = new AdjacencyListDirectedGraph<>();
+        g.addEdge("A", "C");
+        g.addEdge("B", "C");
+        g.addEdge("C", "E");
+        g.addEdge("E", "F");
+        g.addEdge("B", "D");
+        g.addEdge("F", "G");
+        g.addEdge("G", "H");
         System.out.println(g);
 
-        TopologicalSort<Integer> ts = new TopologicalSort<>(g);
+        TopologicalSort<String> ts = new TopologicalSort<>(g);
 
         if (ts.topologicalSortedList() != null) {
             System.out.println(ts.topologicalSortedList()); // [1, 2, 3, 4, 5, 6, 7]
+        }
+
+        System.out.println("--------------------------------------------");
+
+        DirectedGraph<Integer> gg = new AdjacencyListDirectedGraph<>();
+        gg.addEdge(1, 2);
+        gg.addEdge(2, 3);
+        gg.addEdge(3, 4);
+        gg.addEdge(3, 5);
+        gg.addEdge(4, 6);
+        gg.addEdge(5, 6);
+        gg.addEdge(6, 7);
+        System.out.println(gg);
+
+        TopologicalSort<Integer> tss = new TopologicalSort<>(gg);
+
+        if (tss.topologicalSortedList() != null) {
+            System.out.println(tss.topologicalSortedList()); // [1, 2, 3, 4, 5, 6, 7]
         }
     }
 }
