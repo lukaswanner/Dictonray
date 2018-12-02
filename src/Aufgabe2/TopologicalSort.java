@@ -6,6 +6,7 @@ package Aufgabe2;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Klasse zur Erstellung einer topologischen Sortierung.
@@ -24,7 +25,34 @@ public class TopologicalSort<V> {
      * @param g gerichteter Graph.
      */
     public TopologicalSort(DirectedGraph<V> g) {
-        // ...
+        int[] inDegree = new int[g.getVertexSet().size() + 1];
+        Queue<V> q = new LinkedList<>();
+        for (V v : g.getVertexSet()) {
+            inDegree[Integer.parseInt(v.toString())] = g.getInDegree(v);
+            if (inDegree[Integer.parseInt(v.toString())] == 0) {
+                q.add(v);
+            }
+
+        }
+
+        while (!q.isEmpty()) {
+            V v = q.remove();
+            ts.add(v);
+            for (V w : g.getSuccessorVertexSet(v)) {
+                if (--inDegree[Integer.parseInt(w.toString())] == 0) {
+                    q.add(w);
+                }
+            }
+        }
+
+        if (ts.size() != g.getVertexSet().size()) {
+            ts.clear();
+        }
+
+
+
+
+
     }
 
     /**
