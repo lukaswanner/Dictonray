@@ -1,3 +1,2 @@
-# Dictonray
-sorted and hashed 
-Aufgabe1 nicht ganz fertig
+# WS18-19
+work in progress
