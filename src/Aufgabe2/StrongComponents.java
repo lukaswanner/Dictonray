@@ -3,12 +3,11 @@
 
 package Aufgabe2;
 
+import Aufgabe1.Dictionary;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Klasse für Bestimmung aller strengen Komponenten.
@@ -28,6 +27,8 @@ public class StrongComponents<V> {
     // Component 3: 4,
 
     private final Map<Integer, Set<V>> comp = new TreeMap<>();
+    private Set<V> visited = new HashSet<>();
+    private Deque<V> finishtime = new ArrayDeque<>();
 
     /**
      * Ermittelt alle strengen Komponenten mit
@@ -36,7 +37,50 @@ public class StrongComponents<V> {
      * @param g gerichteter Graph.
      */
     public StrongComponents(DirectedGraph<V> g) {
-        // ...
+        for (V v : g.getVertexSet()) {
+            if (visited.contains(v))
+                continue;
+            dfs(g, v);
+        }
+
+        g = g.invert();
+
+        visited.clear();
+        int i = 0;
+        while (!finishtime.isEmpty()) {
+            V v = finishtime.poll();
+            if (visited.contains(v))
+                continue;
+            Set<V> set = new HashSet<>();
+            dfsreverse(g, v, visited, set);
+            comp.put(i++, set);
+        }
+
+    }
+
+    public void dfsreverse(DirectedGraph<V> g, V v, Set<V> visited, Set<V> set) {
+        visited.add(v);
+        set.add(v);
+        for (V succ : g.getSuccessorVertexSet(v)) {
+            if (visited.contains(succ))
+                continue;
+            dfsreverse(g, succ, visited, set);
+        }
+
+    }
+
+    public void dfs(DirectedGraph<V> g, V v) {
+
+        visited.add(v);
+
+        for (V succ : g.getSuccessorVertexSet(v)) {
+            if (visited.contains(succ)) {
+                continue;
+            }
+            dfs(g, succ);
+        }
+        finishtime.offerFirst(v);
+
     }
 
     /**
@@ -48,7 +92,12 @@ public class StrongComponents<V> {
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder result = new StringBuilder();
+
+        for (Map.Entry<Integer, Set<V>> entry : comp.entrySet()) {
+            result.append("Component " + entry.getKey() + " :" + entry.getValue().toString() + " \n");
+        }
+        return result.toString();
     }
 
     /**
@@ -72,6 +121,33 @@ public class StrongComponents<V> {
     }
 
     private static void test1() {
+        DirectedGraph<String> gg = new AdjacencyListDirectedGraph<>();
+
+        gg.addEdge("A", "B");
+        gg.addEdge("B", "C");
+        gg.addEdge("C", "A");
+
+        gg.addEdge("B", "D");
+
+        gg.addEdge("D", "E");
+        gg.addEdge("E", "F");
+        gg.addEdge("F", "D");
+
+        gg.addEdge("G", "F");
+
+        gg.addEdge("G", "H");
+        gg.addEdge("H", "I");
+        gg.addEdge("I", "J");
+        gg.addEdge("J", "G");
+
+        gg.addEdge("J", "K");
+
+        StrongComponents<String> scc = new StrongComponents<>(gg);
+
+        System.out.println(scc);
+
+        System.out.println("----------------------------------------");
+
         DirectedGraph<Integer> g = new AdjacencyListDirectedGraph<>();
         g.addEdge(1, 2);
         g.addEdge(1, 3);
@@ -91,6 +167,7 @@ public class StrongComponents<V> {
 
         StrongComponents<Integer> sc = new StrongComponents<>(g);
 
+
         System.out.println(sc.numberOfComp());  // 4
 
         System.out.println(sc);
@@ -101,7 +178,7 @@ public class StrongComponents<V> {
     }
 
     private static void test2() throws FileNotFoundException {
-        DirectedGraph<Integer> g = readDirectedGraph(new File("mediumDG.txt"));
+        DirectedGraph<Integer> g = readDirectedGraph(new File("C:\\Users\\Lukas\\IdeaProjects\\WS18_Java\\src\\Aufgabe2\\mediumDG.txt"));
         System.out.println(g.getNumberOfVertexes());
         System.out.println(g.getNumberOfEdges());
         System.out.println(g);
@@ -116,6 +193,7 @@ public class StrongComponents<V> {
 
     public static void main(String[] args) throws FileNotFoundException {
         test1();
+        System.out.println("-----------------------Test2--------------------------");
         test2();
     }
 }
