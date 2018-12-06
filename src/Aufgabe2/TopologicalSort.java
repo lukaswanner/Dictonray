@@ -23,28 +23,28 @@ public class TopologicalSort<V> {
      */
     public TopologicalSort(DirectedGraph<V> g) {
         Deque<V> q = new LinkedList<>();
-        Set<V> visited = new HashSet<>();
+        Map<V,Integer> inDegree = new TreeMap<>();
 
         for (V v : g.getVertexSet()) {
-            if (visited.contains(v))
-                continue;
-            topUtil(q, visited, v, g);
+            inDegree.put(v,g.getInDegree(v));
+                if(inDegree.get(v)==0)
+                    q.offerFirst(v);
         }
+
         while (!q.isEmpty()) {
-            ts.add(q.remove());
+            V v = q.remove();
+            ts.add(v);
+            for (V w : g.getSuccessorVertexSet(v)){
+                inDegree.put(w,(inDegree.get(w)-1));
+                if(inDegree.get(w)==0)
+                    q.offerFirst(w);
+            }
         }
 
-    }
-
-    public void topUtil(Deque<V> q, Set<V> visited, V v, DirectedGraph<V> g) {
-        visited.add(v);
-
-        for (V w : g.getSuccessorVertexSet(v)) {
-            if (visited.contains(w))
-                continue;
-            topUtil(q, visited, w, g);
+        if(ts.size() != g.getVertexSet().size()){
+            ts.clear();
         }
-        q.offerFirst(v);
+
     }
 
     /**
@@ -60,13 +60,18 @@ public class TopologicalSort<V> {
 
     public static void main(String[] args) {
         DirectedGraph<String> g = new AdjacencyListDirectedGraph<>();
-        g.addEdge("A", "C");
-        g.addEdge("B", "C");
-        g.addEdge("C", "E");
-        g.addEdge("E", "F");
-        g.addEdge("B", "D");
-        g.addEdge("F", "G");
-        g.addEdge("G", "H");
+        g.addEdge("Unterhose", "Hose");
+        g.addEdge("Unterhemd", "Hemd");
+        g.addEdge("Socken", "Schuhe");
+        g.addEdge("Hose", "Schuhe");
+        g.addEdge("Hose", "Gürtel");
+        g.addEdge("Hemd", "Pulli");
+        g.addEdge("Gürtel", "Mantel");
+        g.addEdge("Pulli", "Mantel");
+        g.addEdge("Schuhe", "Handschuhe");
+        g.addEdge("Mantel", "Schal");
+        g.addEdge("Mütze", "Handschuhe");
+        g.addEdge("Schal", "Handschuhe");
         System.out.println(g);
 
         TopologicalSort<String> ts = new TopologicalSort<>(g);
