@@ -28,7 +28,7 @@ public class StrongComponents<V> {
 
     private final Map<Integer, Set<V>> comp = new TreeMap<>();
     private Set<V> visited = new HashSet<>();
-    private Deque<V> finishtime = new ArrayDeque<>();
+    private Deque<V> stack = new ArrayDeque<>();
 
     /**
      * Ermittelt alle strengen Komponenten mit
@@ -38,22 +38,20 @@ public class StrongComponents<V> {
      */
     public StrongComponents(DirectedGraph<V> g) {
         for (V v : g.getVertexSet()) {
-            if (visited.contains(v))
-                continue;
-            dfs(g, v);
+            if (!visited.contains(v))
+                dfs(g, v);
         }
 
         g = g.invert();
-
         visited.clear();
         int i = 0;
-        while (!finishtime.isEmpty()) {
-            V v = finishtime.poll();
-            if (visited.contains(v))
-                continue;
-            Set<V> set = new HashSet<>();
-            dfsreverse(g, v, visited, set);
-            comp.put(i++, set);
+        while (!stack.isEmpty()) {
+            V v = stack.poll();
+            if (!visited.contains(v)) {
+                Set<V> set = new HashSet<>();
+                dfsreverse(g, v, visited, set);
+                comp.put(i++, set);
+            }
         }
 
     }
@@ -62,9 +60,8 @@ public class StrongComponents<V> {
         visited.add(v);
         set.add(v);
         for (V succ : g.getSuccessorVertexSet(v)) {
-            if (visited.contains(succ))
-                continue;
-            dfsreverse(g, succ, visited, set);
+            if (!visited.contains(succ))
+                dfsreverse(g, succ, visited, set);
         }
 
     }
@@ -74,12 +71,10 @@ public class StrongComponents<V> {
         visited.add(v);
 
         for (V succ : g.getSuccessorVertexSet(v)) {
-            if (visited.contains(succ)) {
-                continue;
-            }
-            dfs(g, succ);
+            if (!visited.contains(succ))
+                dfs(g, succ);
         }
-        finishtime.offerFirst(v);
+        stack.offerFirst(v);
 
     }
 
@@ -178,7 +173,7 @@ public class StrongComponents<V> {
     }
 
     private static void test2() throws FileNotFoundException {
-        DirectedGraph<Integer> g = readDirectedGraph(new File("C:\\Users\\Lukas\\IdeaProjects\\WS18_Java\\src\\Aufgabe2\\mediumDG.txt"));
+        DirectedGraph<Integer> g = readDirectedGraph(new File("/home/student/IdeaProjects/WS18-19/src/Aufgabe2/mediumDG.txt"));
         System.out.println(g.getNumberOfVertexes());
         System.out.println(g.getNumberOfEdges());
         System.out.println(g);

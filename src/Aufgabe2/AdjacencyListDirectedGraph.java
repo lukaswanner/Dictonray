@@ -102,12 +102,6 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
     //TODO in und out nachfragen ob richtig
     @Override
     public int getInDegree(V v) {
-        /*for(V w : succ.keySet()){
-            if(containsEdge(v,w)){
-                System.out.println(v + " - - - -> " + w);
-            }
-        }
-*/
         if (pred.containsKey(v))
             return pred.get(v).size();
         throw new IllegalArgumentException("Nicht vorhanden");
