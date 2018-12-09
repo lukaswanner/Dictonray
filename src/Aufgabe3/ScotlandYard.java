@@ -45,14 +45,20 @@ public class ScotlandYard {
             String input = in.nextLine();
             String[] inArray = input.split(" ");
             if (inArray[2].equals("UBahn"))
-                if (sy_graph.getWeight(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1])) >= 5)
+                if (sy_graph.getWeight(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1])) >= 5) {
                     sy_graph.addEdge(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1]), 5);
+                    sy_graph.addEdge(Integer.parseInt(inArray[1]), Integer.parseInt(inArray[0]), 5);
+                }
             if (inArray[2].equals("Taxi"))
-                if (sy_graph.getWeight(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1])) >= 2)
+                if (sy_graph.getWeight(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1])) >= 2) {
                     sy_graph.addEdge(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1]), 2);
+                    sy_graph.addEdge(Integer.parseInt(inArray[1]), Integer.parseInt(inArray[0]), 2);
+                }
             if (inArray[2].equals("Bus"))
-                if (sy_graph.getWeight(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1])) >= 3)
+                if (sy_graph.getWeight(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1])) >= 3) {
                     sy_graph.addEdge(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1]), 3);
+                    sy_graph.addEdge(Integer.parseInt(inArray[1]), Integer.parseInt(inArray[0]), 3);
+                }
         }
         return sy_graph;
     }
