@@ -84,13 +84,30 @@ public class ShortestPath<V> {
         dist.put(s, 0.0);
 
         while (!UnSettledNodes.isEmpty()) {
-            V smallestNode = UnSettledNodes.getFirst();
+            V smallestNode = null;
+            double smallestNodeDist = Double.MAX_VALUE;
             for (V v : UnSettledNodes) {
-                if (dist.get(v) < dist.get(smallestNode))
-                    smallestNode = v;
+                if (h == null) {
+                    if (dist.get(v) < smallestNodeDist) {
+                        smallestNode = v;
+                        smallestNodeDist = dist.get(v);
+                    }
+
+                } else {
+                    if (dist.get(v) + h.estimatedCost(v, g) < smallestNodeDist) {
+                        smallestNode = v;
+                        smallestNodeDist = dist.get(v) + h.estimatedCost(v, g);
+                    }
+                }
             }
+
+            System.out.println("Besuche " + smallestNode.toString() + " mit der Distanz: " + dist.get(smallestNode));
+
             UnSettledNodes.remove(smallestNode);
             SettledNodes.add(smallestNode);
+            if (h != null && smallestNode == g) {
+                return;
+            }
 
             for (V succ : dg.getSuccessorVertexSet(smallestNode)) {
                 if (!SettledNodes.contains(succ)) {
