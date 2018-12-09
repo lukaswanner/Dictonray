@@ -91,9 +91,9 @@ public class ScotlandYard {
 
         DirectedGraph<Integer> syGraph = getGraph();
 
-        Heuristic<Integer> syHeuristic = null; // Dijkstra
-        //Heuristic<Integer> syHeuristic = getHeuristic(); // A*
-
+        //Heuristic<Integer> syHeuristic = null; // Dijkstra
+        Heuristic<Integer> syHeuristic = getHeuristic(); // A*
+        System.out.println(syHeuristic);
         //System.out.println(syGraph.getWeight(78, 79));
         //System.out.println(syGraph.getWeight(65, 82));
 
@@ -108,7 +108,6 @@ public class ScotlandYard {
 
         sySp.searchShortestPath(1, 173);
         System.out.println("Distance = " + sySp.getDistance()); // 22.0
-/*
 
         SYSimulation sim;
         try {
@@ -140,13 +139,13 @@ public class ScotlandYard {
 
         sim.stopSequence();
 
-*/
+
     }
 
 }
 
 class ScotlandYardHeuristic implements Heuristic<Integer> {
-    private Map<Integer, Point> coord; // Ordnet jedem Knoten seine Koordinaten zu
+    private Map<Integer, Point> coord = new HashMap<>(); // Ordnet jedem Knoten seine Koordinaten zu
 
     private static class Point {
         int x;
@@ -159,12 +158,25 @@ class ScotlandYardHeuristic implements Heuristic<Integer> {
     }
 
     public ScotlandYardHeuristic() throws FileNotFoundException {
-        // ...
+        Scanner in = new Scanner(new File("C:\\Users\\Lukas\\IdeaProjects\\WS18_Java\\src\\Aufgabe3\\ScotlandYard_Knoten.txt"));
+        while (in.hasNext()) {
+            String input1 = in.next();
+            String input2 = in.next();
+            String input3 = in.next();
+            coord.put(Integer.parseInt(input1), new Point(Integer.parseInt(input2), Integer.parseInt(input3)));
+            System.out.println(input1 + " hat " + "x = " + coord.get(Integer.parseInt(input1)).x + " y = " + coord.get(Integer.parseInt(input1)).y);
+        }
+
+    }
+
+    private double dist(int v, int w) {
+        Point vp = coord.get(w);
+        Point wp = coord.get(w);
+        return Math.sqrt((vp.x - wp.x) * (vp.x - wp.x) + (vp.y - wp.y) * (vp.y - wp.y));
     }
 
     public double estimatedCost(Integer u, Integer v) {
-        // ...
-        return 0;
+        return dist(u, v);
     }
 }
 
