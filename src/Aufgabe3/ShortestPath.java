@@ -7,10 +7,7 @@ package Aufgabe3;
 import Aufgabe2.*;
 import Aufgabe3.sim.*;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 // ...
 
 /**
@@ -77,7 +74,51 @@ public class ShortestPath<V> {
         for (V v : dg.getVertexSet())
             dist.put(v, Double.POSITIVE_INFINITY);
 
-        LinkedList<V> SettledNodes = new LinkedList<>();
+        LinkedList<V> kl = new LinkedList<>();
+
+        dist.replace(s, 0.0);
+        kl.add(s);
+
+        while (!kl.isEmpty()) {
+            V v = null;
+            double vdistance = Double.MAX_VALUE;
+            for (V selected : kl) {
+                if (h == null) {
+                    if (dist.get(selected) < vdistance) {
+                        v = selected;
+                        vdistance = dist.get(v);
+                    }
+                } else {
+                    if (dist.get(selected) + h.estimatedCost(selected, g) < vdistance) {
+                        v = selected;
+                        vdistance = dist.get(v) + h.estimatedCost(selected, g);
+                    }
+                }
+            }
+            kl.remove(v);
+            if (dg.getVertexSet().size() < 20)
+                System.out.println("Besuche Knoten " + v.toString() + " mit d = " + dist.get(v));
+
+            if (h != null && v == g) {
+                return;
+            }
+
+            for (V w : dg.getSuccessorVertexSet(v)) {
+                if (!kl.contains(w) && Double.isInfinite(dist.get(w)))
+                    kl.add(w);
+                if (dist.get(v) + dg.getWeight(v, w) < dist.get(w)) {
+                    pred.put(w, v);
+                    dist.replace(w, dist.get(v) + dg.getWeight(v, w));
+                }
+
+            }
+
+        }
+    }
+
+
+    /*
+    LinkedList<V> SettledNodes = new LinkedList<>();
         LinkedList<V> UnSettledNodes = new LinkedList<>();
 
         UnSettledNodes.add(s);
@@ -100,9 +141,9 @@ public class ShortestPath<V> {
                     }
                 }
             }
-
-            System.out.println("Besuche " + smallestNode.toString() + " mit der Distanz: " + dist.get(smallestNode));
-
+            if (dg.getVertexSet().size() < 20) {
+                System.out.println("Besuche " + smallestNode.toString() + " mit d = " + dist.get(smallestNode));
+            }
             UnSettledNodes.remove(smallestNode);
             SettledNodes.add(smallestNode);
             if (h != null && smallestNode == g) {
@@ -122,8 +163,7 @@ public class ShortestPath<V> {
             }
 
         }
-    }
-
+     */
 
     /**
      * Liefert einen kürzesten Weg von Startknoten s nach Zielknoten g.

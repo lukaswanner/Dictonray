@@ -40,10 +40,17 @@ public class ScotlandYard {
     public static DirectedGraph<Integer> getGraph() throws FileNotFoundException {
 
         DirectedGraph<Integer> sy_graph = new AdjacencyListDirectedGraph<>();
-        Scanner in = new Scanner(new File("ScotlandYard_Kanten.txt"));
-
-        // ...
-
+        Scanner in = new Scanner(new File("C:\\Users\\Lukas\\IdeaProjects\\WS18_Java\\src\\Aufgabe3\\ScotlandYard_Kanten.txt"));
+        while (in.hasNext()) {
+            String input = in.nextLine();
+            String[] inArray = input.split(" ");
+            if (inArray[2].equals("UBahn"))
+                sy_graph.addEdge(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1]), 5);
+            if (inArray[2].equals("Taxi"))
+                sy_graph.addEdge(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1]), 2);
+            if (inArray[2].equals("Bus"))
+                sy_graph.addEdge(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1]), 3);
+        }
         return sy_graph;
     }
 
@@ -91,7 +98,7 @@ public class ScotlandYard {
 
         sySp.searchShortestPath(1, 173);
         System.out.println("Distance = " + sySp.getDistance()); // 22.0
-
+/*
 
         SYSimulation sim;
         try {
@@ -123,7 +130,7 @@ public class ScotlandYard {
 
         sim.stopSequence();
 
-
+*/
     }
 
 }
