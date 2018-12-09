@@ -94,9 +94,11 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 
     @Override
     public double getWeight(V v, V w) {
-        if (succ.get(v).containsKey(w))
-            return succ.get(v).get(w);
-        return 0;
+        if (succ.containsKey(v)) {
+            if (succ.get(v).containsKey(w))
+                return succ.get(v).get(w);
+        }
+        return Double.MAX_VALUE;
     }
 
     //TODO in und out nachfragen ob richtig

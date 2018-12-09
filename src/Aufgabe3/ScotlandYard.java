@@ -45,11 +45,14 @@ public class ScotlandYard {
             String input = in.nextLine();
             String[] inArray = input.split(" ");
             if (inArray[2].equals("UBahn"))
-                sy_graph.addEdge(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1]), 5);
+                if (sy_graph.getWeight(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1])) >= 5)
+                    sy_graph.addEdge(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1]), 5);
             if (inArray[2].equals("Taxi"))
-                sy_graph.addEdge(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1]), 2);
+                if (sy_graph.getWeight(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1])) >= 2)
+                    sy_graph.addEdge(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1]), 2);
             if (inArray[2].equals("Bus"))
-                sy_graph.addEdge(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1]), 3);
+                if (sy_graph.getWeight(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1])) >= 3)
+                    sy_graph.addEdge(Integer.parseInt(inArray[0]), Integer.parseInt(inArray[1]), 3);
         }
         return sy_graph;
     }
@@ -92,6 +95,7 @@ public class ScotlandYard {
 
         sySp.searchShortestPath(65, 157);
         System.out.println("Distance = " + sySp.getDistance()); // 9.0
+        System.out.println("Weg = " + sySp.getShortestPath());
 
         sySp.searchShortestPath(1, 175);
         System.out.println("Distance = " + sySp.getDistance()); // 25.0
