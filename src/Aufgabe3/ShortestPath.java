@@ -91,7 +91,7 @@ public class ShortestPath<V> {
                 } else {
                     if (dist.get(selected) + h.estimatedCost(selected, g) < vdistance) {
                         v = selected;
-                        vdistance = dist.get(v) + h.estimatedCost(selected, g);
+                        vdistance = dist.get(selected) + h.estimatedCost(selected, g);
                     }
                 }
             }
@@ -99,7 +99,8 @@ public class ShortestPath<V> {
             if (dg.getVertexSet().size() < 20)
                 System.out.println("Besuche Knoten " + v.toString() + " mit d = " + dist.get(v));
 
-            if (h != null && v == g) {
+            if (h != null && v.equals(g)) {
+                dist.replace(g, dist.get(v));
                 return;
             }
 
@@ -116,54 +117,6 @@ public class ShortestPath<V> {
         }
     }
 
-
-    /*
-    LinkedList<V> SettledNodes = new LinkedList<>();
-        LinkedList<V> UnSettledNodes = new LinkedList<>();
-
-        UnSettledNodes.add(s);
-        dist.put(s, 0.0);
-
-        while (!UnSettledNodes.isEmpty()) {
-            V smallestNode = null;
-            double smallestNodeDist = Double.MAX_VALUE;
-            for (V v : UnSettledNodes) {
-                if (h == null) {
-                    if (dist.get(v) < smallestNodeDist) {
-                        smallestNode = v;
-                        smallestNodeDist = dist.get(v);
-                    }
-
-                } else {
-                    if (dist.get(v) + h.estimatedCost(v, g) < smallestNodeDist) {
-                        smallestNode = v;
-                        smallestNodeDist = dist.get(v) + h.estimatedCost(v, g);
-                    }
-                }
-            }
-            if (dg.getVertexSet().size() < 20) {
-                System.out.println("Besuche " + smallestNode.toString() + " mit d = " + dist.get(smallestNode));
-            }
-            UnSettledNodes.remove(smallestNode);
-            SettledNodes.add(smallestNode);
-            if (h != null && smallestNode == g) {
-                return;
-            }
-
-            for (V succ : dg.getSuccessorVertexSet(smallestNode)) {
-                if (!SettledNodes.contains(succ)) {
-                    double edgeDistance = dg.getWeight(smallestNode, succ);
-                    double newDistance = dist.get(smallestNode) + edgeDistance;
-                    if (dist.get(succ) > newDistance) {
-                        dist.replace(succ, newDistance);
-                        UnSettledNodes.add(succ);
-                        pred.put(succ, smallestNode);
-                    }
-                }
-            }
-
-        }
-     */
 
     /**
      * Liefert einen kürzesten Weg von Startknoten s nach Zielknoten g.

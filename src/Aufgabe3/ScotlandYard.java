@@ -91,13 +91,14 @@ public class ScotlandYard {
 
         DirectedGraph<Integer> syGraph = getGraph();
 
-        //Heuristic<Integer> syHeuristic = null; // Dijkstra
+        Heuristic<Integer> syHeuristic2 = null; // Dijkstra
         Heuristic<Integer> syHeuristic = getHeuristic(); // A*
         System.out.println(syHeuristic);
         //System.out.println(syGraph.getWeight(78, 79));
         //System.out.println(syGraph.getWeight(65, 82));
 
         ShortestPath<Integer> sySp = new ShortestPath<Integer>(syGraph, syHeuristic);
+        ShortestPath<Integer> sySp2 = new ShortestPath<Integer>(syGraph, syHeuristic2); //dijkstra
 
         sySp.searchShortestPath(65, 157);
         System.out.println("Distance = " + sySp.getDistance()); // 9.0
@@ -118,16 +119,20 @@ public class ScotlandYard {
         }
         sySp.setSimulator(sim);
         sim.startSequence("Shortest path from 1 to 173");
+        System.out.println(sySp.getShortestPath());
 
         //sySp.searchShortestPath(65,157); // 9.0
         //sySp.searchShortestPath(1,175); //25.0
 
-        sySp.searchShortestPath(1, 173); //22.0
+        sySp2.searchShortestPath(1, 173); //22.0
+        System.out.println("sySp2 Weg = " + sySp2.getShortestPath());
         // bei Heuristik-Faktor von 1/10 wird nicht der optimale Pfad produziert.
         // bei 1/30 funktioniert es.
 
-        System.out.println("Distance = " + sySp.getDistance());
+        System.out.println("Distance = " + sySp2.getDistance());
         List<Integer> sp = sySp.getShortestPath();
+        List<Integer> sp1 = sySp2.getShortestPath();
+
 
         int a = -1;
         for (int b : sp) {
@@ -135,6 +140,13 @@ public class ScotlandYard {
                 sim.drive(a, b, Color.RED.darker());
             sim.visitStation(b);
             a = b;
+        }
+        int b = -1;
+        for (int c : sp1) {
+            if (b != -1)
+                sim.drive(b, c, Color.BLUE.darker());
+            sim.visitStation(c);
+            b = c;
         }
 
         sim.stopSequence();
@@ -164,15 +176,18 @@ class ScotlandYardHeuristic implements Heuristic<Integer> {
             String input2 = in.next();
             String input3 = in.next();
             coord.put(Integer.parseInt(input1), new Point(Integer.parseInt(input2), Integer.parseInt(input3)));
-            System.out.println(input1 + " hat " + "x = " + coord.get(Integer.parseInt(input1)).x + " y = " + coord.get(Integer.parseInt(input1)).y);
         }
 
     }
 
     private double dist(int v, int w) {
-        Point vp = coord.get(w);
+        Point vp = coord.get(v);
         Point wp = coord.get(w);
-        return Math.sqrt((vp.x - wp.x) * (vp.x - wp.x) + (vp.y - wp.y) * (vp.y - wp.y));
+        double dx = Math.abs(vp.x - wp.x);
+        double dy = Math.abs(vp.y - wp.y);
+        double result = Math.sqrt(dx * dx + dy * dy);
+        result += result * 0.001;
+        return result;
     }
 
     public double estimatedCost(Integer u, Integer v) {
