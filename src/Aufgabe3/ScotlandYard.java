@@ -40,7 +40,7 @@ public class ScotlandYard {
     public static DirectedGraph<Integer> getGraph() throws FileNotFoundException {
 
         DirectedGraph<Integer> sy_graph = new AdjacencyListDirectedGraph<>();
-        Scanner in = new Scanner(new File("C:\\Users\\Lukas\\IdeaProjects\\WS18_Java\\src\\Aufgabe3\\ScotlandYard_Kanten.txt"));
+        Scanner in = new Scanner(new File("/home/student/IdeaProjects/WS18-19/src/Aufgabe3/ScotlandYard_Kanten.txt"));
         while (in.hasNext()) {
             String input = in.nextLine();
             String[] inArray = input.split(" ");
@@ -91,9 +91,8 @@ public class ScotlandYard {
 
         DirectedGraph<Integer> syGraph = getGraph();
 
-        Heuristic<Integer> syHeuristic2 = null; // Dijkstra
         Heuristic<Integer> syHeuristic = getHeuristic(); // A*
-        System.out.println(syHeuristic);
+        Heuristic<Integer> syHeuristic2 = null; // Dijkstra
         //System.out.println(syGraph.getWeight(78, 79));
         //System.out.println(syGraph.getWeight(65, 82));
 
@@ -101,14 +100,17 @@ public class ScotlandYard {
         ShortestPath<Integer> sySp2 = new ShortestPath<Integer>(syGraph, syHeuristic2); //dijkstra
 
         sySp.searchShortestPath(65, 157);
-        System.out.println("Distance = " + sySp.getDistance()); // 9.0
-        System.out.println("Weg = " + sySp.getShortestPath());
+        System.out.println("A* Distance = " + sySp.getDistance()); // 9.0
+        //System.out.println("Weg = " + sySp.getShortestPath());
 
         sySp.searchShortestPath(1, 175);
-        System.out.println("Distance = " + sySp.getDistance()); // 25.0
+        System.out.println("A* Distance = " + sySp.getDistance()); // 25.0
 
         sySp.searchShortestPath(1, 173);
-        System.out.println("Distance = " + sySp.getDistance()); // 22.0
+        System.out.println("A* Distance = " + sySp.getDistance()); // 22.0
+
+        sySp2.searchShortestPath(1, 173);
+        System.out.println("Dijkstra Distance = " + sySp2.getDistance()); // 22.0
 
         SYSimulation sim;
         try {
@@ -119,17 +121,17 @@ public class ScotlandYard {
         }
         sySp.setSimulator(sim);
         sim.startSequence("Shortest path from 1 to 173");
-        System.out.println(sySp.getShortestPath());
+        System.out.println("A * Weg = " + sySp.getShortestPath());
 
         //sySp.searchShortestPath(65,157); // 9.0
         //sySp.searchShortestPath(1,175); //25.0
 
         sySp2.searchShortestPath(1, 173); //22.0
-        System.out.println("sySp2 Weg = " + sySp2.getShortestPath());
+        System.out.println("Dijkstra Weg = " + sySp2.getShortestPath());
         // bei Heuristik-Faktor von 1/10 wird nicht der optimale Pfad produziert.
         // bei 1/30 funktioniert es.
 
-        System.out.println("Distance = " + sySp2.getDistance());
+        System.out.println("Dijkstra Distance = " + sySp2.getDistance());
         List<Integer> sp = sySp.getShortestPath();
         List<Integer> sp1 = sySp2.getShortestPath();
 
@@ -141,11 +143,20 @@ public class ScotlandYard {
             sim.visitStation(b);
             a = b;
         }
+        
+        for (int b : sySp2.pred.keySet()) {
+            if(sySp2.pred.get(b) != null) {
+                sim.visitStation(b);
+                sim.drive(1,b,Color.PINK);
+            }
+        }
+
         int b = -1;
         for (int c : sp1) {
             if (b != -1)
                 sim.drive(b, c, Color.BLUE.darker());
             sim.visitStation(c);
+         //   sim.visitStation(137);
             b = c;
         }
 
@@ -170,7 +181,7 @@ class ScotlandYardHeuristic implements Heuristic<Integer> {
     }
 
     public ScotlandYardHeuristic() throws FileNotFoundException {
-        Scanner in = new Scanner(new File("C:\\Users\\Lukas\\IdeaProjects\\WS18_Java\\src\\Aufgabe3\\ScotlandYard_Knoten.txt"));
+        Scanner in = new Scanner(new File("/home/student/IdeaProjects/WS18-19/src/Aufgabe3/ScotlandYard_Knoten.txt"));
         while (in.hasNext()) {
             String input1 = in.next();
             String input2 = in.next();

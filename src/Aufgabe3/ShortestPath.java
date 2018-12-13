@@ -71,8 +71,10 @@ public class ShortestPath<V> {
     public void searchShortestPath(V s, V g) {
         start = s;
         end = g;
-        for (V v : dg.getVertexSet())
+        for (V v : dg.getVertexSet()) {
             dist.put(v, Double.POSITIVE_INFINITY);
+            pred.put(v,null);
+        }
 
         LinkedList<V> kl = new LinkedList<>();
 
