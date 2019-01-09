@@ -140,25 +140,25 @@ public class ScotlandYard {
         for (int b : sp) {
             if (a != -1)
                 sim.drive(a, b, Color.RED.darker());
-            sim.visitStation(b);
+            sim.visitStation(b,Color.BLUE);
             a = b;
         }
         
         for (int b : sySp.pred.keySet()) {
             if(sySp.pred.get(b) != null) {
-                sim.visitStation(b);
-                sim.drive(1,b,Color.PINK);
+                sim.visitStation(b,Color.BLUE);
+                //sim.drive(1,b,Color.PINK);
             }
         }
-
+/*
         int b = -1;
         for (int c : sp1) {
             if (b != -1)
                 sim.drive(b, c, Color.BLUE.darker());
             sim.visitStation(c);
-         //   sim.visitStation(137);
             b = c;
         }
+*/
 
         sim.stopSequence();
 
@@ -194,7 +194,7 @@ class ScotlandYardHeuristic implements Heuristic<Integer> {
     private double dist(int v, int w) {
         Point vp = coord.get(v);
         Point wp = coord.get(w);
-        return (Math.sqrt((vp.x - wp.x) * (vp.x - wp.x) + (vp.y - wp.y) * (vp.y - wp.y)))*1/10;
+        return (Math.sqrt((vp.x - wp.x) * (vp.x - wp.x) + (vp.y - wp.y) * (vp.y - wp.y)))*1/30;
     }
 
     public double estimatedCost(Integer u, Integer v) {

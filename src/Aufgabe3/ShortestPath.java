@@ -92,7 +92,7 @@ public class ShortestPath<V> {
                     }
                 } else {
                     //OUTPUT
-                    System.out.println("selected ist :" + selected.toString() +" und die Distanz ist :" + dist.get(selected)+ " und die Heuristic ist :" + h.estimatedCost(selected,g));
+                    //System.out.println("selected ist :" + selected.toString() +" und die Distanz ist :" + dist.get(selected)+ " und die Heuristic ist :" + h.estimatedCost(selected,g));
 
 
                     if (dist.get(selected) + h.estimatedCost(selected, g) < vdistance) {
@@ -102,9 +102,11 @@ public class ShortestPath<V> {
                 }
             }
 
-            //OUTPUT
+            /*OUTPUT
             if(h != null)
                 System.out.println("V ist: " + v.toString() +  " und die Distanz von v ist :" + dist.get(v)+ " und die Heuristic ist :" + h.estimatedCost(v,g));
+            */
+
 
             //OUTPUT
             if (dg.getVertexSet().size() < 20)
