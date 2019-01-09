@@ -97,20 +97,20 @@ public class ScotlandYard {
         //System.out.println(syGraph.getWeight(65, 82));
 
         ShortestPath<Integer> sySp = new ShortestPath<Integer>(syGraph, syHeuristic);
-        ShortestPath<Integer> sySp2 = new ShortestPath<Integer>(syGraph, syHeuristic2); //dijkstra
+        //ShortestPath<Integer> sySp2 = new ShortestPath<Integer>(syGraph, syHeuristic2); //dijkstra
 
-        sySp.searchShortestPath(65, 157);
-        System.out.println("A* Distance = " + sySp.getDistance()); // 9.0
+        //sySp.searchShortestPath(65, 157);
+        //System.out.println("A* Distance = " + sySp.getDistance()); // 9.0
         //System.out.println("Weg = " + sySp.getShortestPath());
 
-        sySp.searchShortestPath(1, 175);
-        System.out.println("A* Distance = " + sySp.getDistance()); // 25.0
+        //sySp.searchShortestPath(1, 175);
+        //System.out.println("A* Distance = " + sySp.getDistance()); // 25.0
 
         sySp.searchShortestPath(1, 173);
         System.out.println("A* Distance = " + sySp.getDistance()); // 22.0
 
-        sySp2.searchShortestPath(1, 173);
-        System.out.println("Dijkstra Distance = " + sySp2.getDistance()); // 22.0
+        //sySp2.searchShortestPath(1, 173);
+        //System.out.println("Dijkstra Distance = " + sySp2.getDistance()); // 22.0
 
         SYSimulation sim;
         try {
@@ -120,20 +120,20 @@ public class ScotlandYard {
             return;
         }
         sySp.setSimulator(sim);
-        sim.startSequence("Shortest path from 1 to 173");
+        sim.startSequence("Shortest path from 1 to 175");
         System.out.println("A * Weg = " + sySp.getShortestPath());
 
         //sySp.searchShortestPath(65,157); // 9.0
         //sySp.searchShortestPath(1,175); //25.0
 
-        sySp2.searchShortestPath(1, 173); //22.0
-        System.out.println("Dijkstra Weg = " + sySp2.getShortestPath());
+        //sySp2.searchShortestPath(1, 173); //22.0
+        //System.out.println("Dijkstra Weg = " + sySp2.getShortestPath());
         // bei Heuristik-Faktor von 1/10 wird nicht der optimale Pfad produziert.
         // bei 1/30 funktioniert es.
 
-        System.out.println("Dijkstra Distance = " + sySp2.getDistance());
+       // System.out.println("Dijkstra Distance = " + sySp2.getDistance());
         List<Integer> sp = sySp.getShortestPath();
-        List<Integer> sp1 = sySp2.getShortestPath();
+        //List<Integer> sp1 = sySp2.getShortestPath();
 
 
         int a = -1;
@@ -143,12 +143,12 @@ public class ScotlandYard {
             sim.visitStation(b,Color.BLUE);
             a = b;
         }
-        
-        for (int b : sySp.pred.keySet()) {
-            if(sySp.pred.get(b) != null) {
-                sim.visitStation(b,Color.BLUE);
+
+        for (int b : sySp.visited) {
+
+                sim.visitStation(b,Color.GREEN);
                 //sim.drive(1,b,Color.PINK);
-            }
+
         }
 /*
         int b = -1;
@@ -194,7 +194,7 @@ class ScotlandYardHeuristic implements Heuristic<Integer> {
     private double dist(int v, int w) {
         Point vp = coord.get(v);
         Point wp = coord.get(w);
-        return (Math.sqrt((vp.x - wp.x) * (vp.x - wp.x) + (vp.y - wp.y) * (vp.y - wp.y)))*1/30;
+        return (Math.sqrt((vp.x - wp.x) * (vp.x - wp.x) + (vp.y - wp.y) * (vp.y - wp.y)))*1.0/30.0;
     }
 
     public double estimatedCost(Integer u, Integer v) {

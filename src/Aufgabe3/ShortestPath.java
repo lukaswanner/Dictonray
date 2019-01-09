@@ -7,7 +7,9 @@ package Aufgabe3;
 import Aufgabe2.*;
 import Aufgabe3.sim.*;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 // ...
 
 /**
@@ -27,6 +29,7 @@ public class ShortestPath<V> {
     V end;
     DirectedGraph<V> dg = null;
     Heuristic<V> h = null;
+    LinkedList<Integer> visited = new LinkedList<>();
 
     /**
      * Berechnet im Graph g kürzeste Wege nach dem A*-Verfahren.
@@ -109,12 +112,11 @@ public class ShortestPath<V> {
 
 
             //OUTPUT
-            if (dg.getVertexSet().size() < 20)
-                System.out.println("Besuche Knoten " + v.toString() + " mit d = " + dist.get(v));
+            System.out.println("Besuche Knoten " + v.toString() + " mit d = " + dist.get(v));
 
 
             kl.remove(v);
-
+            visited.add(Integer.parseInt(v.toString()));
 
             if (h != null && v.equals(g)) {
                 dist.replace(g, dist.get(v));
