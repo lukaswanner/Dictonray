@@ -144,8 +144,8 @@ public class ScotlandYard {
             a = b;
         }
         
-        for (int b : sySp2.pred.keySet()) {
-            if(sySp2.pred.get(b) != null) {
+        for (int b : sySp.pred.keySet()) {
+            if(sySp.pred.get(b) != null) {
                 sim.visitStation(b);
                 sim.drive(1,b,Color.PINK);
             }
@@ -194,11 +194,7 @@ class ScotlandYardHeuristic implements Heuristic<Integer> {
     private double dist(int v, int w) {
         Point vp = coord.get(v);
         Point wp = coord.get(w);
-        double dx = Math.abs(vp.x - wp.x);
-        double dy = Math.abs(vp.y - wp.y);
-        double result = Math.sqrt(dx * dx + dy * dy);
-        result += result * 0.001;
-        return result;
+        return (Math.sqrt((vp.x - wp.x) * (vp.x - wp.x) + (vp.y - wp.y) * (vp.y - wp.y)))*1/10;
     }
 
     public double estimatedCost(Integer u, Integer v) {

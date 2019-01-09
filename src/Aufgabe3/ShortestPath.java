@@ -91,15 +91,28 @@ public class ShortestPath<V> {
                         vdistance = dist.get(v);
                     }
                 } else {
+                    //OUTPUT
+                    System.out.println("selected ist :" + selected.toString() +" und die Distanz ist :" + dist.get(selected)+ " und die Heuristic ist :" + h.estimatedCost(selected,g));
+
+
                     if (dist.get(selected) + h.estimatedCost(selected, g) < vdistance) {
                         v = selected;
                         vdistance = dist.get(selected) + h.estimatedCost(selected, g);
                     }
                 }
             }
-            kl.remove(v);
+
+            //OUTPUT
+            if(h != null)
+                System.out.println("V ist: " + v.toString() +  " und die Distanz von v ist :" + dist.get(v)+ " und die Heuristic ist :" + h.estimatedCost(v,g));
+
+            //OUTPUT
             if (dg.getVertexSet().size() < 20)
                 System.out.println("Besuche Knoten " + v.toString() + " mit d = " + dist.get(v));
+
+
+            kl.remove(v);
+
 
             if (h != null && v.equals(g)) {
                 dist.replace(g, dist.get(v));
