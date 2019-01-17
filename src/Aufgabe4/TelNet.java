@@ -2,6 +2,7 @@ package Aufgabe4;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
 
 public class TelNet {
@@ -10,7 +11,7 @@ public class TelNet {
     public int lbg;
     //TelKnoten-Liste
     public HashMap<Integer,TelKnoten> TelKnotenVerbindung = new HashMap<>();
-    public PriorityQueue<TelVerbindung> TelVerbindungen = new PriorityQueue<>();
+    public List<TelVerbindung> TelVerbindungen = new LinkedList<>();
 
     public TelNet(int lbg) {
         this.lbg = lbg;
@@ -38,7 +39,11 @@ public class TelNet {
     }
 
     public LinkedList<TelVerbindung> getOptTelNet() {
+
+        UnionFind forest = new UnionFind(TelKnotenVerbindung.size());
+        PriorityQueue<TelVerbindung> verbindungen;
         return null;
+
     }
 
     public int getOptTelNetKosten(){
