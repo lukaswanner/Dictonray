@@ -41,7 +41,16 @@ public class TelNet {
     public LinkedList<TelVerbindung> getOptTelNet() {
 
         UnionFind forest = new UnionFind(TelKnotenVerbindung.size());
-        PriorityQueue<TelVerbindung> verbindungen;
+        PriorityQueue<TelVerbindung> verbindungen = new PriorityQueue<>();
+        for (int i = 0; i < TelVerbindungen.size() ; i++) {
+            verbindungen.add(TelVerbindungen.get(i));
+        }
+        List<TelVerbindung> minSpanTree;
+
+        while(forest.size() != 1 && !verbindungen.isEmpty()) {
+
+        }
+
         return null;
 
     }
