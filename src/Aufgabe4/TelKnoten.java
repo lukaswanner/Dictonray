@@ -12,7 +12,7 @@ public class TelKnoten {
 
     @Override
     public String toString() {
-        String knoten = "X = " + x + " & Y = " + y;
+        String knoten = "("+x+"/"+y+")";
         return knoten;
     }
 

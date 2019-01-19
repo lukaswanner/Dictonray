@@ -24,7 +24,7 @@ public class UnionFind {
     public int size() {
         int i = 0;
         for (int j = 0; j < arr.length; j++) {
-            if(arr[i] < 0 )
+            if(arr[j] < 0 )
                 i++;
         }
         return i;
@@ -51,9 +51,9 @@ public class UnionFind {
         un.arr[3] = -1;
         un.arr[5] = -2;
         un.union(3,5);
-        un.union(2,5);
         System.out.println(un.arr[3]);
-        System.out.println(un.find(5));
+        System.out.println(un.find(3));
+        System.out.println(un.size());
 
     }
 }

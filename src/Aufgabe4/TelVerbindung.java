@@ -19,9 +19,14 @@ public class TelVerbindung implements Comparable<TelVerbindung> {
     @Override
     public int compareTo(TelVerbindung o) {
         if(this.c < o.c) {
-            return this.c;
+            return -1;
         }else {
-            return o.c;
+            return 1;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "(" + u.x + "/" + u.y + ")  => " + " ("+v.x + "/" + v.y + ")" + " mit Gewicht: "+ c;
     }
 }
