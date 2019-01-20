@@ -40,18 +40,43 @@ public class TelNet {
     }
 
     public boolean computeOptTelNet() {
-        if(getOptTelNet() == null) {
+        if (getOptTelNet() == null) {
             return false;
         }
         return true;
     }
 
     public void drawOptTelNet(int xMax, int yMax) {
+        StdDraw.setCanvasSize(xMax,yMax);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.filledSquare(0,0,xMax);
+        StdDraw.setXscale(0, xMax);
+        StdDraw.setYscale(0, yMax);
+        StdDraw.setPenRadius(0.003);
 
+        for (TelVerbindung tv : minSpanTree) {
+            StdDraw.setPenColor(StdDraw.WHITE);
+            StdDraw.filledRectangle(tv.v.x, tv.v.y, 2.5, 2.5);
+            StdDraw.filledRectangle(tv.u.x, tv.u.y, 2.5, 2.5);
+            StdDraw.setPenColor(StdDraw.RED);
+            StdDraw.filledCircle(tv.v.x, tv.v.y, 1.5);
+            StdDraw.filledCircle(tv.u.x, tv.u.y, 1.5);
+            StdDraw.line(tv.u.x, tv.u.y, tv.v.x, tv.u.y);
+            StdDraw.line(tv.v.x, tv.u.y, tv.v.x, tv.v.y);
+        }
+        StdDraw.show();
     }
 
     public void generateRandomTelNet(int n, int xMax, int yMax) {
-
+        TelKnoten.clear();
+        edges.clear();
+        for (int i = 0; i < n; i++) {
+            addTelKnoten((int) (Math.random() * ((xMax - 1) + 1)) + 1, (int) (Math.random() * ((yMax - 1) + 1)) + 1);
+        }
+        if(getOptTelNet() != null) {
+            System.out.println("yay");
+            drawOptTelNet(xMax,yMax);
+        }
     }
 
     public LinkedList<TelVerbindung> getOptTelNet() {
@@ -105,7 +130,7 @@ public class TelNet {
 
     public int getOptTelNetKosten() {
         int cost = -1;
-        if(minSpanTree.size() > 0) {
+        if (minSpanTree.size() > 0) {
             cost = 0;
             for (TelVerbindung tv : minSpanTree) {
                 cost += tv.c;
@@ -120,19 +145,20 @@ public class TelNet {
 
     public static void main(String[] args) {
 
-        TelNet net = new TelNet(7);
-        net.addTelKnoten(1, 1);
-        net.addTelKnoten(3, 1);
-        net.addTelKnoten(4, 2);
-        net.addTelKnoten(3, 4);
-        net.addTelKnoten(7, 5);
-        net.addTelKnoten(2, 6);
-        net.addTelKnoten(4, 7);
+        TelNet net = new TelNet(100);
+        net.addTelKnoten(10, 10);
+        net.addTelKnoten(30, 10);
+        net.addTelKnoten(40, 20);
+        net.addTelKnoten(30, 40);
+        net.addTelKnoten(70, 50);
+        net.addTelKnoten(20, 60);
+        net.addTelKnoten(40, 70);
         LinkedList<TelVerbindung> mylist = net.getOptTelNet();
-        for (TelVerbindung tl : mylist){
+        for (TelVerbindung tl : mylist) {
             System.out.println(tl.toString());
         }
         System.out.println(net.getOptTelNetKosten());
+        net.generateRandomTelNet(1000,1920,1080);
     }
 
 
