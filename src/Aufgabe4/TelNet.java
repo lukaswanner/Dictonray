@@ -74,27 +74,18 @@ public class TelNet {
             addTelKnoten((int) (Math.random() * ((xMax - 1) + 1)) + 1, (int) (Math.random() * ((yMax - 1) + 1)) + 1);
         }
         if(getOptTelNet() != null) {
-            System.out.println("yay");
             drawOptTelNet(xMax,yMax);
         }
     }
 
     public LinkedList<TelVerbindung> getOptTelNet() {
         minSpanTree.clear();
-        System.out.println(TelKnoten.size());
-        System.out.println(edges.size());
 
         UnionFind forest = new UnionFind(TelKnoten.size());
         PriorityQueue<TelVerbindung> pq = new PriorityQueue<>(TelVerbindung::compareTo);
         for (int i = 0; (i) < edges.size(); i++) {
             pq.add(edges.get(i));
         }
-
-
-        for (int i = 0; i < TelKnoten.size(); i++) {
-            System.out.println(TelKnoten.get(i).toString());
-        }
-
 
         while (forest.size() != 1 && !pq.isEmpty()) {
             TelVerbindung tv = pq.poll();
@@ -117,9 +108,6 @@ public class TelNet {
             }
         }
 
-        if (pq.isEmpty()) {
-            System.out.println(forest.size());
-        }
         if (pq.isEmpty() && forest.size() != 1) {
             return null;
         }
@@ -158,7 +146,7 @@ public class TelNet {
             System.out.println(tl.toString());
         }
         System.out.println(net.getOptTelNetKosten());
-        net.generateRandomTelNet(1000,1920,1080);
+        net.generateRandomTelNet(1080,1920,1080);
     }
 
 

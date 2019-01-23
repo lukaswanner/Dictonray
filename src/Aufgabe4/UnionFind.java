@@ -48,12 +48,11 @@ public class UnionFind {
 
     public static void main(String[] args) {
         UnionFind un = new UnionFind(6);
-        un.arr[3] = -1;
-        un.arr[5] = -2;
         un.union(3,5);
         System.out.println(un.arr[3]);
         System.out.println(un.find(3));
         System.out.println(un.size());
+        System.out.println(un.find(5));
 
     }
 }
